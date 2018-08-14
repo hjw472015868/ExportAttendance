@@ -34,15 +34,15 @@
 
 /* Begin PBXFileReference section */
 		182F0F02212284C90022443A /* LibXL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LibXL.framework; sourceTree = SOURCE_ROOT; };
-		66C881D9165D10AA009069DF /* libxl-example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "libxl-example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66C881D9165D10AA009069DF /* ExportAttendance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExportAttendance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66C881DD165D10AA009069DF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		66C881E0165D10AA009069DF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		66C881E1165D10AA009069DF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		66C881E2165D10AA009069DF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		66C881E5165D10AA009069DF /* libxl-example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libxl-example-Info.plist"; sourceTree = "<group>"; };
+		66C881E5165D10AA009069DF /* ExportAttendance-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportAttendance-Info.plist"; sourceTree = "<group>"; };
 		66C881E7165D10AA009069DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		66C881E9165D10AA009069DF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		66C881EB165D10AA009069DF /* libxl-example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libxl-example-Prefix.pch"; sourceTree = "<group>"; };
+		66C881EB165D10AA009069DF /* ExportAttendance-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ExportAttendance-Prefix.pch"; sourceTree = "<group>"; };
 		66C881ED165D10AA009069DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		66C881EF165D10AA009069DF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		66C881F0165D10AA009069DF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 		66C881DA165D10AA009069DF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				66C881D9165D10AA009069DF /* libxl-example.app */,
+				66C881D9165D10AA009069DF /* ExportAttendance.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -116,10 +116,10 @@
 		66C881E4165D10AA009069DF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				66C881E5165D10AA009069DF /* libxl-example-Info.plist */,
+				66C881E5165D10AA009069DF /* ExportAttendance-Info.plist */,
 				66C881E6165D10AA009069DF /* InfoPlist.strings */,
 				66C881E9165D10AA009069DF /* main.m */,
-				66C881EB165D10AA009069DF /* libxl-example-Prefix.pch */,
+				66C881EB165D10AA009069DF /* ExportAttendance-Prefix.pch */,
 				66C881EC165D10AA009069DF /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -128,9 +128,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		66C881D8165D10AA009069DF /* libxl-example */ = {
+		66C881D8165D10AA009069DF /* ExportAttendance */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 66C881F7165D10AA009069DF /* Build configuration list for PBXNativeTarget "libxl-example" */;
+			buildConfigurationList = 66C881F7165D10AA009069DF /* Build configuration list for PBXNativeTarget "ExportAttendance" */;
 			buildPhases = (
 				66C881D5165D10AA009069DF /* Sources */,
 				66C881D6165D10AA009069DF /* Frameworks */,
@@ -141,9 +141,9 @@
 			);
 			dependencies = (
 			);
-			name = "libxl-example";
+			name = ExportAttendance;
 			productName = "libxl-example";
-			productReference = 66C881D9165D10AA009069DF /* libxl-example.app */;
+			productReference = 66C881D9165D10AA009069DF /* ExportAttendance.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -155,7 +155,7 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = xlware;
 			};
-			buildConfigurationList = 66C881D3165D10AA009069DF /* Build configuration list for PBXProject "libxl-example" */;
+			buildConfigurationList = 66C881D3165D10AA009069DF /* Build configuration list for PBXProject "ExportAttendance" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -167,7 +167,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				66C881D8165D10AA009069DF /* libxl-example */,
+				66C881D8165D10AA009069DF /* ExportAttendance */,
 			);
 		};
 /* End PBXProject section */
@@ -284,8 +284,8 @@
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "libxl-example/libxl-example-Prefix.pch";
-				INFOPLIST_FILE = "libxl-example/libxl-example-Info.plist";
+				GCC_PREFIX_HEADER = "libxl-example/ExportAttendance-Prefix.pch";
+				INFOPLIST_FILE = "libxl-example/ExportAttendance-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -302,8 +302,8 @@
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "libxl-example/libxl-example-Prefix.pch";
-				INFOPLIST_FILE = "libxl-example/libxl-example-Info.plist";
+				GCC_PREFIX_HEADER = "libxl-example/ExportAttendance-Prefix.pch";
+				INFOPLIST_FILE = "libxl-example/ExportAttendance-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -313,7 +313,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		66C881D3165D10AA009069DF /* Build configuration list for PBXProject "libxl-example" */ = {
+		66C881D3165D10AA009069DF /* Build configuration list for PBXProject "ExportAttendance" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				66C881F5165D10AA009069DF /* Debug */,
@@ -322,7 +322,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		66C881F7165D10AA009069DF /* Build configuration list for PBXNativeTarget "libxl-example" */ = {
+		66C881F7165D10AA009069DF /* Build configuration list for PBXNativeTarget "ExportAttendance" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				66C881F8165D10AA009069DF /* Debug */,
