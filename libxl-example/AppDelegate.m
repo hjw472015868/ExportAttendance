@@ -28,6 +28,25 @@
     // Insert code here to initialize your application
     
 }
+- (IBAction)touchSelecteFileBtn:(id)sender {
+    NSOpenPanel* panel = [NSOpenPanel openPanel];
+    //是否可以创建文件夹
+    panel.canCreateDirectories = NO;
+    //是否可以选择文件夹
+    panel.canChooseDirectories = NO;
+    //是否可以选择文件
+    panel.canChooseFiles = YES;
+    //是否可以多选
+    [panel setAllowsMultipleSelection:NO];
+    //显示
+    [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+        //是否点击open 按钮
+        if (result == NSModalResponseOK) {
+            NSString *path = [[panel.URLs firstObject] path];
+            NSLog(@"path-->%@", path);
+        }
+    }];
+}
 
 - (IBAction)createExcel:(id)sender
 {
