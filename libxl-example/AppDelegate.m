@@ -44,8 +44,25 @@
         if (result == NSModalResponseOK) {
             NSString *path = [[panel.URLs firstObject] path];
             NSLog(@"path-->%@", path);
+            [self readExcelFileWithPath:path];
         }
     }];
+}
+
+- (void)readExcelFileWithPath:(NSString *)path {
+    NSString *extensionStr = [path pathExtension];
+    NSLog(@"extensionStr-->%@", extensionStr);
+    BOOL xlsMode = [extensionStr isEqualToString:kXLSExtension];
+    BookHandle book;
+    book = xlsMode ? xlCreateBook() : xlCreateXMLBook();
+    BOOL loadBookSuccess = xlBookLoadA(book, [path UTF8String]);
+    if (loadBookSuccess) {
+        SheetHandle sheet = xlBookGetSheetA(book, 0);
+        FormatHandle titleFormat;
+        const char *c = xlSheetReadStr(sheet, 4, 3  , &titleFormat);
+        NSString *str = [[NSString stringWithUTF8String:c] stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+        NSLog(@"str = %@", str);
+    }
 }
 
 - (IBAction)createExcel:(id)sender
