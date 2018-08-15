@@ -11,6 +11,8 @@
 		182F0F04212284D10022443A /* LibXL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 182F0F02212284C90022443A /* LibXL.framework */; };
 		182F0F05212284D10022443A /* LibXL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 182F0F02212284C90022443A /* LibXL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		182F0F1D2122BA470022443A /* YXHConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F0F1C2122BA470022443A /* YXHConst.m */; };
+		182F0F212122CF2F0022443A /* YXHStaffAtt.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F0F202122CF2F0022443A /* YXHStaffAtt.m */; };
+		182F0F242122D0D70022443A /* YXHDayAtt.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F0F232122D0D70022443A /* YXHDayAtt.m */; };
 		66C881DE165D10AA009069DF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66C881DD165D10AA009069DF /* Cocoa.framework */; };
 		66C881E8165D10AA009069DF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66C881E6165D10AA009069DF /* InfoPlist.strings */; };
 		66C881EA165D10AA009069DF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66C881E9165D10AA009069DF /* main.m */; };
@@ -37,6 +39,10 @@
 		182F0F02212284C90022443A /* LibXL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LibXL.framework; sourceTree = SOURCE_ROOT; };
 		182F0F1B2122BA470022443A /* YXHConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXHConst.h; sourceTree = "<group>"; };
 		182F0F1C2122BA470022443A /* YXHConst.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXHConst.m; sourceTree = "<group>"; };
+		182F0F1F2122CF2F0022443A /* YXHStaffAtt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXHStaffAtt.h; sourceTree = "<group>"; };
+		182F0F202122CF2F0022443A /* YXHStaffAtt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXHStaffAtt.m; sourceTree = "<group>"; };
+		182F0F222122D0D70022443A /* YXHDayAtt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXHDayAtt.h; sourceTree = "<group>"; };
+		182F0F232122D0D70022443A /* YXHDayAtt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXHDayAtt.m; sourceTree = "<group>"; };
 		66C881D9165D10AA009069DF /* ExportAttendance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExportAttendance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66C881DD165D10AA009069DF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		66C881E0165D10AA009069DF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -74,6 +80,17 @@
 				182F0F1C2122BA470022443A /* YXHConst.m */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		182F0F1E2122CF030022443A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				182F0F1F2122CF2F0022443A /* YXHStaffAtt.h */,
+				182F0F202122CF2F0022443A /* YXHStaffAtt.m */,
+				182F0F222122D0D70022443A /* YXHDayAtt.h */,
+				182F0F232122D0D70022443A /* YXHDayAtt.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		66C881CE165D10AA009069DF = {
@@ -120,6 +137,7 @@
 				66C881EF165D10AA009069DF /* AppDelegate.h */,
 				66C881F0165D10AA009069DF /* AppDelegate.m */,
 				66C881F2165D10AA009069DF /* MainMenu.xib */,
+				182F0F1E2122CF030022443A /* Model */,
 				182F0F172122B9E60022443A /* Other */,
 				66C881E4165D10AA009069DF /* Supporting Files */,
 			);
@@ -205,7 +223,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				66C881EA165D10AA009069DF /* main.m in Sources */,
+				182F0F242122D0D70022443A /* YXHDayAtt.m in Sources */,
 				66C881F1165D10AA009069DF /* AppDelegate.m in Sources */,
+				182F0F212122CF2F0022443A /* YXHStaffAtt.m in Sources */,
 				182F0F1D2122BA470022443A /* YXHConst.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

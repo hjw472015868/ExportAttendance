@@ -6,10 +6,31 @@
 #import "AppDelegate.h"
 #include "LibXL/libxl.h"
 
+#import "YXHStaffAtt.h"
+#import "YXHDayAtt.h"
+
+#define kStaffNoColIndex 3
+
+@interface AppDelegate ()
+
+@property (nonatomic, assign) FormatHandle titleFormat;
+@property (nonatomic, assign) SheetHandle sourceSheet0;
+@property (nonatomic, strong) NSMutableArray *staffTitleIndexList;
+
+
+@end
+
 @implementation AppDelegate
 
 @synthesize excelFormat;
 @synthesize window;
+
+- (NSMutableArray *)staffTitleIndexList {
+    if (!_staffTitleIndexList) {
+        _staffTitleIndexList = [NSMutableArray array];
+    }
+    return _staffTitleIndexList;
+}
 
 - (id)init {
 	[NSApp setDelegate:self];
@@ -53,15 +74,143 @@
     NSString *extensionStr = [path pathExtension];
     NSLog(@"extensionStr-->%@", extensionStr);
     BOOL xlsMode = [extensionStr isEqualToString:kXLSExtension];
-    BookHandle book;
-    book = xlsMode ? xlCreateBook() : xlCreateXMLBook();
-    BOOL loadBookSuccess = xlBookLoadA(book, [path UTF8String]);
+    BookHandle sourceBook;
+    sourceBook = xlsMode ? xlCreateBook() : xlCreateXMLBook();
+    BOOL loadBookSuccess = xlBookLoadA(sourceBook, [path UTF8String]);
     if (loadBookSuccess) {
-        SheetHandle sheet = xlBookGetSheetA(book, 0);
-        FormatHandle titleFormat;
-        const char *c = xlSheetReadStr(sheet, 4, 3  , &titleFormat);
-        NSString *str = [[NSString stringWithUTF8String:c] stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
-        NSLog(@"str = %@", str);
+        _sourceSheet0 = xlBookGetSheetA(sourceBook, 0);
+        for (int i = 0; i < 200; i++) {
+            int cellType = xlSheetCellTypeA(_sourceSheet0, i, 1);
+            switch (cellType) {
+                case CELLTYPE_BLANK:
+                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_BLANK");
+//                    xlSheetReadBlankA(sheet, <#int row#>, <#int col#>, <#FormatHandle *format#>)
+                    break;
+                case CELLTYPE_EMPTY:
+                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_EMPTY");
+                    break;
+                case CELLTYPE_ERROR:
+                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_ERROR");
+                    break;
+                case CELLTYPE_NUMBER:
+                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_NUMBER");
+                    break;
+                case CELLTYPE_STRING: {
+//                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_STRING");
+                    const char *cStr = xlSheetReadStr(_sourceSheet0, i, 1, &_titleFormat);
+                    NSString *ocStr = [NSString stringWithUTF8String:cStr];
+                    NSLog(@"%i -- %@",i + 1, ocStr);
+                    if ([ocStr isEqualToString:@"???"]) {
+                        [self.staffTitleIndexList addObject:@(i)];
+                    }
+                    break;
+                }
+                case CELLTYPE_BOOLEAN:
+                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_BOOLEAN");
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        [self checkStaffTitleIndexList];
+//        const char *c = xlSheetReadStr(sheet, 6, 6  , &titleFormat);
+//        NSLog(@"str = %s", c);
+//        NSLog(@"%s", __func__);
+    }
+}
+
+- (void)checkStaffTitleIndexList {
+    if (!self.staffTitleIndexList.count) return;
+    for (NSInteger i = 0; i < self.staffTitleIndexList.count; i++) {
+        int rowIndex = [self.staffTitleIndexList[i] intValue];
+        if (i + 1 < self.staffTitleIndexList.count) {
+            // 存在下一个
+            int nextRowIndex = [self.staffTitleIndexList[i + 1] intValue];
+            [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
+        } else {
+            // 没有下一个
+            NSLog(@"last");
+        }
+    }
+}
+
+- (void)readStaffNoWithRowIndex:(int)rowIndex nextRowIndex:(int)nextRowIndex {
+    int cellType = xlSheetCellTypeA(_sourceSheet0, rowIndex, kStaffNoColIndex);
+    switch (cellType) {
+        case CELLTYPE_BLANK:
+            NSLog(@"staffNo-->CELLTYPE_BLANK");
+            break;
+        case CELLTYPE_EMPTY:
+            NSLog(@"staffNo-->CELLTYPE_EMPTY");
+            break;
+        case CELLTYPE_ERROR:
+            NSLog(@"staffNo-->CELLTYPE_ERROR");
+            break;
+        case CELLTYPE_NUMBER:
+            NSLog(@"staffNo-->CELLTYPE_NUMBER");
+            break;
+        case CELLTYPE_STRING: {
+            // 读取工号
+            const char *cStr = xlSheetReadStr(_sourceSheet0, rowIndex, kStaffNoColIndex, &_titleFormat);
+            NSString *staffNo = [NSString stringWithUTF8String:cStr];
+//            NSLog(@"staffNo-->%@--CELLTYPE_STRING", staffNo);
+            [self generationStaffAttInfoWithStaffNo:staffNo rowIndex:rowIndex nextRowIndex:nextRowIndex];
+            break;
+        }
+        case CELLTYPE_BOOLEAN:
+            NSLog(@"staffNo-->CELLTYPE_BOOLEAN");
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)generationStaffAttInfoWithStaffNo:(NSString *)staffNo rowIndex:(int)rowIndex nextRowIndex:(int)nextRowIndex {
+    YXHStaffAtt *staffAtt = [[YXHStaffAtt alloc] init];
+    staffAtt.staffNo = staffNo;
+    staffAtt.days = [NSMutableArray array];
+    int timeStartRow = rowIndex + 2;
+    int timeEndRow = nextRowIndex - 1;
+    // 此处可根据当月天数来遍历
+    for (int col = 1; col <= 31; col++) {
+        YXHDayAtt *dayAtt = [[YXHDayAtt alloc] init];
+        dayAtt.day = [NSString stringWithFormat:@"%i", col];
+        dayAtt.attRcod = [NSMutableArray array];
+        for (int row = timeStartRow; row <= timeEndRow; row++) {
+            NSLog(@"row = %i, col = %i", row, col);
+            int cellType = xlSheetCellTypeA(_sourceSheet0, row, col);
+            switch (cellType) {
+                case CELLTYPE_NUMBER:
+                case CELLTYPE_STRING: {
+                    const char *cStr = xlSheetReadStr(_sourceSheet0, row, col, &_titleFormat);
+                    NSLog(@"cStr->%s", cStr);
+                    NSString *timeStr = [NSString stringWithUTF8String:cStr];
+                    [dayAtt.attRcod addObjectsFromArray:[timeStr componentsSeparatedByString:@"\n"]];
+                    if ([dayAtt.attRcod.lastObject containsString:@" "]) [dayAtt.attRcod removeLastObject];
+                    break;
+                }
+                    
+                default:
+                    break;
+            }
+        }
+        [staffAtt.days addObject:dayAtt];
+    }
+//    NSLog(@"staffAtt = %@", staffAtt);
+    [self printStaffAtt:staffAtt];
+}
+
+- (void)printStaffAtt:(YXHStaffAtt *)staffAtt {
+    NSLog(@"========");
+    NSLog(@"staffNo = %@", staffAtt.staffNo);
+    for (int i = 0; i < staffAtt.days.count; i++) {
+        YXHDayAtt *dayAtt = staffAtt.days[i];
+        NSLog(@"day = %@", dayAtt.day);
+        for (NSInteger j = 0; j < dayAtt.attRcod.count; j++) {
+            NSLog(@"time = %@", dayAtt.attRcod[j]);
+        }
     }
 }
 
