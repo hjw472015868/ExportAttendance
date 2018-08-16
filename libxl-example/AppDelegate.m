@@ -10,6 +10,7 @@
 #import "YXHDayAtt.h"
 
 #define kStaffNoColIndex 3
+#define kBaseIndex 2
 
 @interface AppDelegate ()
 
@@ -17,6 +18,7 @@
 @property (nonatomic, assign) SheetHandle sourceSheet0;
 @property (nonatomic, strong) NSMutableArray *staffTitleIndexList;
 
+@property (nonatomic, strong) NSMutableArray *staffAttList;
 
 @end
 
@@ -24,6 +26,13 @@
 
 @synthesize excelFormat;
 @synthesize window;
+
+- (NSMutableArray<YXHStaffAtt *> *)staffAttList {
+    if (!_staffAttList) {
+        _staffAttList = [NSMutableArray array];
+    }
+    return _staffAttList;
+}
 
 - (NSMutableArray *)staffTitleIndexList {
     if (!_staffTitleIndexList) {
@@ -129,6 +138,7 @@
 //        NSLog(@"%s", __func__);
     }
     xlBookRelease(sourceBook);
+    [self createAttExcel];
 }
 
 - (void)checkStaffTitleIndexList {
@@ -231,8 +241,61 @@
         [staffAtt.days addObject:dayAtt];
 //        sleep(1);
     }
+    [self.staffAttList addObject:staffAtt];
 //    NSLog(@"staffAtt = %@", staffAtt);
-    [self printStaffAtt:staffAtt];
+//    [self printStaffAtt:staffAtt];
+}
+
+- (void)createAttExcel {
+    NSLog(@"self.staffAttList = %@", self.staffAttList);
+    SheetHandle targetSheet;
+    BookHandle targetBook;
+    targetBook = xlCreateXMLBook();
+    targetSheet = xlBookAddSheet(targetBook, "staffAtt", 0);
+    if(targetSheet) {
+        for (NSInteger i = 0; i < self.staffAttList.count; i++) {
+            YXHStaffAtt *staffAtt = self.staffAttList[i];
+            const char *staffNo = [staffAtt.staffNo UTF8String];
+            // 写入工号
+            xlSheetWriteStr(targetSheet, (int)(i + kBaseIndex), kStaffNoColIndex, staffNo, NULL);
+            // 写入考勤状态
+            for (NSInteger j = 0; j < staffAtt.days.count; j++) {
+                int row = (int)(i + kBaseIndex);
+                int col = (int)(kStaffNoColIndex + 1 + j);
+                YXHDayAtt *day = staffAtt.days[j];
+                NSString *attStatus = @"X\nX";
+                if (day.attRcod.count == 0) {
+                    
+                } else if (day.attRcod.count == 1) {
+                    
+                } else {
+                    
+                }
+                const char *cAttStatus = [attStatus UTF8String];
+                xlSheetWriteStr(targetSheet, row, col, cAttStatus, NULL);
+            }
+        }
+        // 写入日期
+        [self writeDay:self.staffAttList[0] targetSheet:targetSheet];
+    }
+    NSString *name = @"targetBook.xlsx";
+    NSString *documentPath =
+    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *filename = [documentPath stringByAppendingPathComponent:name];
+    xlBookSave(targetBook, [filename UTF8String]);
+    xlBookRelease(targetBook);
+    [[NSWorkspace sharedWorkspace] openFile:filename];
+}
+
+- (void)writeDay:(YXHStaffAtt *)staffAtt targetSheet:(SheetHandle)targetSheet {
+    NSLog(@"%s", __func__);
+    int row = kBaseIndex - 1;
+    for (NSInteger i = 0; i < staffAtt.days.count; i++) {
+        YXHDayAtt *day = staffAtt.days[i];
+        int col = (int)(kStaffNoColIndex + 1 + i);
+        // 写入日期
+        xlSheetWriteStr(targetSheet, row, col, [day.day UTF8String], NULL);
+    }
 }
 
 - (void)printStaffAtt:(YXHStaffAtt *)staffAtt {
