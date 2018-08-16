@@ -11,3 +11,4 @@
 
 extern NSString *const kXLSExtension;
 extern NSString *const kXLSXExtension;
+extern NSString *const kLocKey;

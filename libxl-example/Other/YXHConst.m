@@ -10,3 +10,4 @@
 
 NSString *const kXLSExtension = @"xls";
 NSString *const kXLSXExtension = @"xlsx";
+NSString *const kLocKey = @"kLocKey";

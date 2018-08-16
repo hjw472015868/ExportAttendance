@@ -55,7 +55,7 @@
 }
 
 - (void)setCacheWithLoc:(NSInteger)loc {
-    [[NSUserDefaults standardUserDefaults] setInteger:loc forKey:@"kLoc"];
+    [[NSUserDefaults standardUserDefaults] setInteger:loc forKey:kLocKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -133,7 +133,7 @@
 
 - (void)checkStaffTitleIndexList {
     if (!self.staffTitleIndexList.count) return;
-    NSInteger loc = [[NSUserDefaults standardUserDefaults] integerForKey:@"kLoc"];
+    NSInteger loc = [[NSUserDefaults standardUserDefaults] integerForKey:kLocKey];
     NSInteger length = 0;
     if ((loc / 10) == (self.staffTitleIndexList.count / 10)) {
         length = self.staffTitleIndexList.count % 10;
