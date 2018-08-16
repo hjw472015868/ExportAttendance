@@ -49,6 +49,16 @@
     // Insert code here to initialize your application
     
 }
+
+- (IBAction)clearCache:(id)sender {
+    [self setCacheWithLoc:0];
+}
+
+- (void)setCacheWithLoc:(NSInteger)loc {
+    [[NSUserDefaults standardUserDefaults] setInteger:loc forKey:@"kLoc"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (IBAction)touchSelecteFileBtn:(id)sender {
     NSOpenPanel* panel = [NSOpenPanel openPanel];
     //是否可以创建文件夹
@@ -118,21 +128,60 @@
 //        NSLog(@"str = %s", c);
 //        NSLog(@"%s", __func__);
     }
+    xlBookRelease(sourceBook);
 }
 
 - (void)checkStaffTitleIndexList {
     if (!self.staffTitleIndexList.count) return;
-    for (NSInteger i = 0; i < self.staffTitleIndexList.count; i++) {
-        int rowIndex = [self.staffTitleIndexList[i] intValue];
-        if (i + 1 < self.staffTitleIndexList.count) {
+    NSInteger loc = [[NSUserDefaults standardUserDefaults] integerForKey:@"kLoc"];
+    NSInteger length = 0;
+    if ((loc / 10) == (self.staffTitleIndexList.count / 10)) {
+        length = self.staffTitleIndexList.count % 10;
+        [self clearCache:nil];
+    } else {
+        length = 10;
+    }
+    NSArray *subList = [self.staffTitleIndexList subarrayWithRange:NSMakeRange(loc, length)];
+    // 前40个
+//    NSInteger groups = self.staffTitleIndexList.count / 10;
+//    for (NSInteger j = 0; j < groups; j++) {
+//        NSArray *subList = [self.staffTitleIndexList subarrayWithRange:NSMakeRange(j * 10, 10)];
+//        for (NSInteger i = 0; i < subList.count; i++) {
+//            int rowIndex = [subList[i] intValue];
+//            if (i + 1 < subList.count) {
+//                // 存在下一个
+//                int nextRowIndex = [subList[i + 1] intValue];
+//                [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
+//            } else {
+//                // 没有下一个
+//                NSLog(@"last");
+//                int nextRowIndex = [self.staffTitleIndexList[j * 10 + 10] intValue];
+//                [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
+//            }
+//        }
+//    }
+    int nextRowIndex = 0;
+    for (NSInteger i = 0; i < subList.count; i++) {
+        int rowIndex = [subList[i] intValue];
+        if (i + 1 < subList.count) {
             // 存在下一个
-            int nextRowIndex = [self.staffTitleIndexList[i + 1] intValue];
-            [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
+            nextRowIndex = [subList[i + 1] intValue];
         } else {
             // 没有下一个
-            NSLog(@"last");
+//            NSLog(@"last");
+            if (length == 10) {
+                nextRowIndex = [self.staffTitleIndexList[loc + length] intValue];
+            } else {
+                nextRowIndex += 4;
+            }
         }
+        [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
     }
+    loc += 10;
+    if (loc > self.staffTitleIndexList.count) {
+        loc = 0;
+    }
+    [self setCacheWithLoc:loc];
 }
 
 - (void)readStaffNoWithRowIndex:(int)rowIndex nextRowIndex:(int)nextRowIndex {
@@ -197,6 +246,7 @@
             }
         }
         [staffAtt.days addObject:dayAtt];
+//        sleep(1);
     }
 //    NSLog(@"staffAtt = %@", staffAtt);
     [self printStaffAtt:staffAtt];
