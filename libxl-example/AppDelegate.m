@@ -142,24 +142,6 @@
         length = 10;
     }
     NSArray *subList = [self.staffTitleIndexList subarrayWithRange:NSMakeRange(loc, length)];
-    // 前40个
-//    NSInteger groups = self.staffTitleIndexList.count / 10;
-//    for (NSInteger j = 0; j < groups; j++) {
-//        NSArray *subList = [self.staffTitleIndexList subarrayWithRange:NSMakeRange(j * 10, 10)];
-//        for (NSInteger i = 0; i < subList.count; i++) {
-//            int rowIndex = [subList[i] intValue];
-//            if (i + 1 < subList.count) {
-//                // 存在下一个
-//                int nextRowIndex = [subList[i + 1] intValue];
-//                [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
-//            } else {
-//                // 没有下一个
-//                NSLog(@"last");
-//                int nextRowIndex = [self.staffTitleIndexList[j * 10 + 10] intValue];
-//                [self readStaffNoWithRowIndex:rowIndex nextRowIndex:nextRowIndex];
-//            }
-//        }
-//    }
     int nextRowIndex = 0;
     for (NSInteger i = 0; i < subList.count; i++) {
         int rowIndex = [subList[i] intValue];
@@ -168,7 +150,6 @@
             nextRowIndex = [subList[i + 1] intValue];
         } else {
             // 没有下一个
-//            NSLog(@"last");
             if (length == 10) {
                 nextRowIndex = [self.staffTitleIndexList[loc + length] intValue];
             } else {
@@ -228,13 +209,13 @@
         dayAtt.day = [NSString stringWithFormat:@"%i", col];
         dayAtt.attRcod = [NSMutableArray array];
         for (int row = timeStartRow; row <= timeEndRow; row++) {
-            NSLog(@"row = %i, col = %i", row, col);
+//            NSLog(@"row = %i, col = %i", row, col);
             int cellType = xlSheetCellTypeA(_sourceSheet0, row, col);
             switch (cellType) {
                 case CELLTYPE_NUMBER:
                 case CELLTYPE_STRING: {
                     const char *cStr = xlSheetReadStr(_sourceSheet0, row, col, &_titleFormat);
-                    NSLog(@"cStr->%s", cStr);
+//                    NSLog(@"cStr->%s", cStr);
                     NSString *timeStr = [NSString stringWithUTF8String:cStr];
                     [dayAtt.attRcod addObjectsFromArray:[timeStr componentsSeparatedByString:@"\n"]];
                     if ([dayAtt.attRcod.lastObject containsString:@" "]) [dayAtt.attRcod removeLastObject];
