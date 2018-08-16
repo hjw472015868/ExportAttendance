@@ -11,6 +11,7 @@
 
 #define kStaffNoColIndex 3
 #define kBaseIndex 2
+#define kRowHeight 30
 
 @interface AppDelegate ()
 
@@ -252,31 +253,30 @@
     BookHandle targetBook;
     targetBook = xlCreateXMLBook();
     targetSheet = xlBookAddSheet(targetBook, "staffAtt", 0);
+    FormatHandle staffNoFormat;
+    staffNoFormat = xlBookAddFormat(targetBook, 0);
+    xlFormatSetAlignH(staffNoFormat, ALIGNH_CENTER);
+    xlFormatSetAlignV(staffNoFormat, ALIGNV_CENTER);
     if(targetSheet) {
         for (NSInteger i = 0; i < self.staffAttList.count; i++) {
             YXHStaffAtt *staffAtt = self.staffAttList[i];
             const char *staffNo = [staffAtt.staffNo UTF8String];
+//            xlSheetSetRowA(SheetHandle handle, int row, double height, FormatHandle format, int hidden);
+            // 设置行高
+            xlSheetSetRow(targetSheet, (int)(i + kBaseIndex), kRowHeight, NULL, false);
             // 写入工号
-            xlSheetWriteStr(targetSheet, (int)(i + kBaseIndex), kStaffNoColIndex, staffNo, NULL);
+            xlSheetWriteStr(targetSheet, (int)(i + kBaseIndex), kStaffNoColIndex, staffNo, staffNoFormat);
             // 写入考勤状态
             for (NSInteger j = 0; j < staffAtt.days.count; j++) {
                 int row = (int)(i + kBaseIndex);
                 int col = (int)(kStaffNoColIndex + 1 + j);
                 YXHDayAtt *day = staffAtt.days[j];
-                NSString *attStatus = @"X\nX";
-                if (day.attRcod.count == 0) {
-                    
-                } else if (day.attRcod.count == 1) {
-                    
-                } else {
-                    
-                }
-                const char *cAttStatus = [attStatus UTF8String];
-                xlSheetWriteStr(targetSheet, row, col, cAttStatus, NULL);
+                const char *cAttStatus = [self attStatusWithDay:day];
+                xlSheetWriteStr(targetSheet, row, col, cAttStatus, staffNoFormat);
             }
         }
         // 写入日期
-        [self writeDay:self.staffAttList[0] targetSheet:targetSheet];
+        [self writeDay:self.staffAttList[0] targetSheet:targetSheet format:staffNoFormat];
     }
     NSString *name = @"targetBook.xlsx";
     NSString *documentPath =
@@ -287,14 +287,27 @@
     [[NSWorkspace sharedWorkspace] openFile:filename];
 }
 
-- (void)writeDay:(YXHStaffAtt *)staffAtt targetSheet:(SheetHandle)targetSheet {
+- (const char *)attStatusWithDay:(YXHDayAtt *)day {
+    NSString *attStatus = @"X\nX";
+    if (day.attRcod.count == 0) {
+        
+    } else if (day.attRcod.count == 1) {
+        
+    } else {
+        
+    }
+//    return [attStatus UTF8String];
+    return "X\nX";
+}
+
+- (void)writeDay:(YXHStaffAtt *)staffAtt targetSheet:(SheetHandle)targetSheet format:(FormatHandle)format {
     NSLog(@"%s", __func__);
     int row = kBaseIndex - 1;
     for (NSInteger i = 0; i < staffAtt.days.count; i++) {
         YXHDayAtt *day = staffAtt.days[i];
         int col = (int)(kStaffNoColIndex + 1 + i);
         // 写入日期
-        xlSheetWriteStr(targetSheet, row, col, [day.day UTF8String], NULL);
+        xlSheetWriteStr(targetSheet, row, col, [day.day UTF8String], format);
     }
 }
 
