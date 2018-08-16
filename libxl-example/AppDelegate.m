@@ -204,7 +204,9 @@
     int timeStartRow = rowIndex + 2;
     int timeEndRow = nextRowIndex - 1;
     // 此处可根据当月天数来遍历
-    for (int col = 1; col <= 31; col++) {
+    NSCalendar * calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSRange range = [calendar rangeOfUnit:NSDayCalendarUnit inUnit: NSMonthCalendarUnit forDate:[NSDate date]];
+    for (int col = 1; col <= range.length; col++) {
         YXHDayAtt *dayAtt = [[YXHDayAtt alloc] init];
         dayAtt.day = [NSString stringWithFormat:@"%i", col];
         dayAtt.attRcod = [NSMutableArray array];
