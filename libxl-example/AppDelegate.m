@@ -288,16 +288,48 @@
 }
 
 - (const char *)attStatusWithDay:(YXHDayAtt *)day {
-    NSString *attStatus = @"X\nX";
+    //    NSDate *date = [NSDate dateFromString:@"2018-08-17" format:@"yyyy-MM-dd"];
+    //    NSLog(@"date = %@", date);
+    //    NSString *dateStr = [NSDate dateStrFromDate:[NSDate date] withDateFormat:@"yyyy-MM-dd"];
+    //    NSLog(@"dateStr = %@", dateStr);
+    
+    NSString *attStatus = nil;
     if (day.attRcod.count == 0) {
-        
+        attStatus = @"X-X";
     } else if (day.attRcod.count == 1) {
-        
+        NSString *timeStr = [day.attRcod firstObject];
+        NSString *attDateStr = [NSString stringWithFormat:@"2018-01-01 %@", timeStr];
+        NSDate *attDate = [NSDate dateFromString:attDateStr format:@"yyyy-MM-dd HH:mm"];
+        NSDate *date09 = [NSDate get09P];
+        NSDate *date12 = [NSDate get12P];
+        NSDate *date18 = [NSDate get18P];
+        NSLog(@"attDate = %@", attDate);
+        NSLog(@"date12 = %@", date12);
+        BOOL a = [attDate isEarlierThanDate:date12];
+        NSLog(@"a = %zd", a);
+        if ([attDate isEarlierThanDate:date12]) {
+            if ([attDate isEarlierThanDate:date09]) {
+                // 上班正常
+                attStatus = @"√-X";
+            } else {
+                // 上班迟到
+                attStatus = @"▽-X";
+            }
+        } else {
+            if ([attDate isEarlierThanDate:date18]) {
+                // 下班早退
+                attStatus = @"X-△";
+            } else {
+                // 下班正常
+                attStatus = @"X-√";
+            }
+        }
     } else {
-        
+        attStatus = @"o";
     }
-//    return [attStatus UTF8String];
-    return "X\nX";
+//    NSData *tempData = [@"X-△" dataUsingEncoding:NSUTF8StringEncoding];
+//    NSString *string = [NSPropertyListSerialization propertyListWithData:tempData options:NSPropertyListImmutable format:NULL error:NULL];
+    return [attStatus UTF8String];
 }
 
 - (void)writeDay:(YXHStaffAtt *)staffAtt targetSheet:(SheetHandle)targetSheet format:(FormatHandle)format {

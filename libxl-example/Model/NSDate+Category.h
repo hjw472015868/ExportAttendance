@@ -1,7 +1,13 @@
-/*
- Erica Sadun, http://ericasadun.com
- iPhone Developer's Cookbook 3.x and beyond
- BSD License, Use at your own risk
+/************************************************************
+ *  * Hyphenate CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Hyphenate Inc.
  */
 
 #import <Foundation/Foundation.h>
@@ -12,9 +18,62 @@
 #define D_WEEK		604800
 #define D_YEAR		31556926
 
-@interface NSDate (Utilities)
-+ (NSCalendar *) currentCalendar; // avoid bottlenecks
+@interface NSDate (Category)
 
+
+
++ (NSDate *)currentDate;
+
++ (NSDate *)get09P;
+
++ (NSDate *)get12P;
+
++ (NSDate *)get18P;
+
+/**
+ *  计算两个时间差
+ *
+ *  @param startTime 开始时间
+ *  @param endTime  结束时间
+ *
+ *  @return NSString
+ */
++ (NSInteger)dateTimeDifferenceWithStartTime:(NSString *)startTime endTime:(NSString *)endTime;
+
+/**
+ *  字符串转NSDate
+ *
+ *  @param timeStr 字符串时间
+ *  @param format  转化格式 如yyyy-MM-dd HH:mm:ss,即2015-07-15 15:00:00
+ *
+ *  @return NSDate
+ */
++ (NSDate *)dateFromString:(NSString *)timeStr format:(NSString *)format;
+
+/**
+ *  NSDate转字符串
+ *
+ *  @param date   NSDate时间
+ *  @param format 转化格式 如yyyy-MM-dd HH:mm:ss,即2015-07-15 15:00:00
+ *
+ *  @return 返回字符串格式时间
+ */
++ (NSString *)dateStrFromDate:(NSDate *)date withDateFormat:(NSString *)format;
+
+/**
+ *  计算特定日期是周几
+ */
++ (NSString *)weekdayStringFromDate:(NSDate*)inputDate;
+//当前的timeZone
++ (NSTimeZone *)currentTimeZone;
+
+- (NSString *)timeIntervalDescription;
+- (NSString *)minuteDescription;
+- (NSString *)formattedTime;
+- (NSString *)formattedDateDescription;
+- (double)timeIntervalSince1970InMilliSecond;
++ (NSDate *)dateWithTimeIntervalInMilliSecondSince1970:(double)timeIntervalInMilliSecond;
++ (NSString *)formattedTimeFromTimeInterval:(long long)time;
 // Relative dates from the current date
 + (NSDate *) dateTomorrow;
 + (NSDate *) dateYesterday;
@@ -25,44 +84,23 @@
 + (NSDate *) dateWithMinutesFromNow: (NSInteger) dMinutes;
 + (NSDate *) dateWithMinutesBeforeNow: (NSInteger) dMinutes;
 
-// Short string utilities
-- (NSString *) stringWithDateStyle: (NSDateFormatterStyle) dateStyle timeStyle: (NSDateFormatterStyle) timeStyle;
-- (NSString *) stringWithFormat: (NSString *) format;
-@property (nonatomic, readonly) NSString *shortString;
-@property (nonatomic, readonly) NSString *shortDateString;
-@property (nonatomic, readonly) NSString *shortTimeString;
-@property (nonatomic, readonly) NSString *mediumString;
-@property (nonatomic, readonly) NSString *mediumDateString;
-@property (nonatomic, readonly) NSString *mediumTimeString;
-@property (nonatomic, readonly) NSString *longString;
-@property (nonatomic, readonly) NSString *longDateString;
-@property (nonatomic, readonly) NSString *longTimeString;
-
 // Comparing dates
 - (BOOL) isEqualToDateIgnoringTime: (NSDate *) aDate;
-
 - (BOOL) isToday;
 - (BOOL) isTomorrow;
 - (BOOL) isYesterday;
-
 - (BOOL) isSameWeekAsDate: (NSDate *) aDate;
 - (BOOL) isThisWeek;
 - (BOOL) isNextWeek;
 - (BOOL) isLastWeek;
-
 - (BOOL) isSameMonthAsDate: (NSDate *) aDate;
 - (BOOL) isThisMonth;
-- (BOOL) isNextMonth;
-- (BOOL) isLastMonth;
-
 - (BOOL) isSameYearAsDate: (NSDate *) aDate;
 - (BOOL) isThisYear;
 - (BOOL) isNextYear;
 - (BOOL) isLastYear;
-
 - (BOOL) isEarlierThanDate: (NSDate *) aDate;
 - (BOOL) isLaterThanDate: (NSDate *) aDate;
-
 - (BOOL) isInFuture;
 - (BOOL) isInPast;
 
@@ -71,20 +109,13 @@
 - (BOOL) isTypicallyWeekend;
 
 // Adjusting dates
-- (NSDate *) dateByAddingYears: (NSInteger) dYears;
-- (NSDate *) dateBySubtractingYears: (NSInteger) dYears;
-- (NSDate *) dateByAddingMonths: (NSInteger) dMonths;
-- (NSDate *) dateBySubtractingMonths: (NSInteger) dMonths;
 - (NSDate *) dateByAddingDays: (NSInteger) dDays;
 - (NSDate *) dateBySubtractingDays: (NSInteger) dDays;
 - (NSDate *) dateByAddingHours: (NSInteger) dHours;
 - (NSDate *) dateBySubtractingHours: (NSInteger) dHours;
 - (NSDate *) dateByAddingMinutes: (NSInteger) dMinutes;
 - (NSDate *) dateBySubtractingMinutes: (NSInteger) dMinutes;
-
-// Date extremes
 - (NSDate *) dateAtStartOfDay;
-- (NSDate *) dateAtEndOfDay;
 
 // Retrieving intervals
 - (NSInteger) minutesAfterDate: (NSDate *) aDate;
@@ -94,6 +125,12 @@
 - (NSInteger) daysAfterDate: (NSDate *) aDate;
 - (NSInteger) daysBeforeDate: (NSDate *) aDate;
 - (NSInteger)distanceInDaysToDate:(NSDate *)anotherDate;
+
++ (NSString *)timeInfoWithDateString:(long long)time;
+//将时间戳转换为NSDate类型
++(NSDate *)getDateTimeFromMilliSeconds:(long long) miliSeconds;
+//将NSDate类型的时间转换为时间戳,从1970/1/1开始
++(long long)getDateTimeTOMilliSeconds:(NSDate *)datetime;
 
 // Decomposing dates
 @property (readonly) NSInteger nearestHour;
@@ -106,4 +143,5 @@
 @property (readonly) NSInteger weekday;
 @property (readonly) NSInteger nthWeekday; // e.g. 2nd Tuesday of the month == 2
 @property (readonly) NSInteger year;
+
 @end
