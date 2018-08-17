@@ -276,7 +276,7 @@
                 int col = (int)(kStaffNoColIndex + 1 + j);
                 YXHDayAtt *day = staffAtt.days[j];
                 const char *cAttStatus = [self attStatusWithDay:day];
-                xlSheetWriteStr(targetSheet, row, col, "X\nX", staffAttStatusFormat);
+                xlSheetWriteStr(targetSheet, row, col, cAttStatus, staffAttStatusFormat);
             }
         }
         // 写入日期
@@ -297,16 +297,16 @@
     //    NSString *dateStr = [NSDate dateStrFromDate:[NSDate date] withDateFormat:@"yyyy-MM-dd"];
     //    NSLog(@"dateStr = %@", dateStr);
     
+    NSDate *date09 = [NSDate get09P];
+    NSDate *date12 = [NSDate get12P];
+    NSDate *date18 = [NSDate get18P];
     NSString *attStatus = nil;
     if (day.attRcod.count == 0) {
-        attStatus = @"X-X";
+        attStatus = @"X\nX";
     } else if (day.attRcod.count == 1) {
         NSString *timeStr = [day.attRcod firstObject];
         NSString *attDateStr = [NSString stringWithFormat:@"2018-01-01 %@", timeStr];
         NSDate *attDate = [NSDate dateFromString:attDateStr format:@"yyyy-MM-dd HH:mm"];
-        NSDate *date09 = [NSDate get09P];
-        NSDate *date12 = [NSDate get12P];
-        NSDate *date18 = [NSDate get18P];
         NSLog(@"attDate = %@", attDate);
         NSLog(@"date12 = %@", date12);
         BOOL a = [attDate isEarlierThanDate:date12];
@@ -314,25 +314,36 @@
         if ([attDate isEarlierThanDate:date12]) {
             if ([attDate isEarlierThanDate:date09]) {
                 // 上班正常
-                attStatus = @"√-X";
+                attStatus = @"OK\nX";
             } else {
                 // 上班迟到
-                attStatus = @"▽-X";
+                attStatus = @"come late\nX";
             }
         } else {
             if ([attDate isEarlierThanDate:date18]) {
                 // 下班早退
-                attStatus = @"X-△";
+                attStatus = @"X\nleave early";
             } else {
                 // 下班正常
-                attStatus = @"X-√";
+                attStatus = @"X\nOK";
             }
         }
     } else {
         attStatus = @"o";
+        NSString *firstTimeStr = [day.attRcod firstObject];
+        NSString *firstAttDateStr = [NSString stringWithFormat:@"2018-01-01 %@", firstTimeStr];
+        NSDate *firstAttDate = [NSDate dateFromString:firstAttDateStr format:@"yyyy-MM-dd HH:mm"];
+        
+        NSString *lastTimeStr = [day.attRcod lastObject];
+        NSString *lastAttDateStr = [NSString stringWithFormat:@"2018-01-01 %@", lastTimeStr];
+        NSDate *lastAttDate = [NSDate dateFromString:lastAttDateStr format:@"yyyy-MM-dd HH:mm"];
+        if ([firstAttDate isEarlierThanDate:date09]) {
+            // 第一个时间比12点要早
+            
+        } else if ([firstAttDate isLaterThanDate:date09]) {
+            
+        }
     }
-//    NSData *tempData = [@"X-△" dataUsingEncoding:NSUTF8StringEncoding];
-//    NSString *string = [NSPropertyListSerialization propertyListWithData:tempData options:NSPropertyListImmutable format:NULL error:NULL];
     return [attStatus UTF8String];
 }
 
