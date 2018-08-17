@@ -257,6 +257,10 @@
     staffNoFormat = xlBookAddFormat(targetBook, 0);
     xlFormatSetAlignH(staffNoFormat, ALIGNH_CENTER);
     xlFormatSetAlignV(staffNoFormat, ALIGNV_CENTER);
+    FormatHandle staffAttStatusFormat;
+    staffAttStatusFormat = xlBookAddFormat(targetBook, 0);
+    xlFormatSetAlignH(staffAttStatusFormat, ALIGNH_CENTER);
+    xlFormatSetAlignV(staffAttStatusFormat, ALIGNV_JUSTIFY);
     if(targetSheet) {
         for (NSInteger i = 0; i < self.staffAttList.count; i++) {
             YXHStaffAtt *staffAtt = self.staffAttList[i];
@@ -272,7 +276,7 @@
                 int col = (int)(kStaffNoColIndex + 1 + j);
                 YXHDayAtt *day = staffAtt.days[j];
                 const char *cAttStatus = [self attStatusWithDay:day];
-                xlSheetWriteStr(targetSheet, row, col, cAttStatus, staffNoFormat);
+                xlSheetWriteStr(targetSheet, row, col, "X\nX", staffAttStatusFormat);
             }
         }
         // 写入日期
