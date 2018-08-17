@@ -11,7 +11,7 @@
 
 #define kStaffNoColIndex 3
 #define kBaseIndex 2
-#define kRowHeight 30
+#define kRowHeight 25
 
 @interface AppDelegate ()
 
