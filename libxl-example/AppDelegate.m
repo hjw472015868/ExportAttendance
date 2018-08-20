@@ -311,8 +311,8 @@
         NSLog(@"date12 = %@", date12);
         BOOL a = [attDate isEarlierThanDate:date12];
         NSLog(@"a = %zd", a);
-        if ([attDate isEarlierThanDate:date12]) {
-            if ([attDate isEarlierThanDate:date09]) {
+        if ([attDate isEarlierThanDate:date12] || [attDate isEqualToDate:date12]) {
+            if ([attDate isEarlierThanDate:date09] || [attDate isEqualToDate:date09]) {
                 // 上班正常
                 attStatus = @"OK\nX";
             } else {
@@ -329,7 +329,7 @@
             }
         }
     } else {
-        attStatus = @"o";
+//      所有的2018-01-01都是随便写的
         NSString *firstTimeStr = [day.attRcod firstObject];
         NSString *firstAttDateStr = [NSString stringWithFormat:@"2018-01-01 %@", firstTimeStr];
         NSDate *firstAttDate = [NSDate dateFromString:firstAttDateStr format:@"yyyy-MM-dd HH:mm"];
@@ -337,12 +337,31 @@
         NSString *lastTimeStr = [day.attRcod lastObject];
         NSString *lastAttDateStr = [NSString stringWithFormat:@"2018-01-01 %@", lastTimeStr];
         NSDate *lastAttDate = [NSDate dateFromString:lastAttDateStr format:@"yyyy-MM-dd HH:mm"];
-        if ([firstAttDate isEarlierThanDate:date09]) {
-            // 第一个时间比12点要早
-            
-        } else if ([firstAttDate isLaterThanDate:date09]) {
-            
+        NSString *firstStr = nil;
+        NSString *lastStr = nil;
+        // 计算上午时间
+        if ([firstAttDate isEarlierThanDate:date09] || [firstAttDate isEqualToDate:date09]) {
+            // time <= 9 正常上班
+            firstStr = @"OK";
+        } else if ([firstAttDate isLaterThanDate:date09] && ([firstAttDate isEarlierThanDate:date12] || [firstAttDate isEqualToDate:date12])) {
+            // 9 < time <= 12 迟到
+            firstStr = @"come late";
+        } else {
+            // 上午缺勤
+            firstStr = @"X";
         }
+        // 计算下午时间
+        if ([lastAttDate isEarlierThanDate:date18] && ([lastAttDate isLaterThanDate:date12] || [lastAttDate isEqualToDate:date12])) {
+            // 12 <= time < 18 早退
+            lastStr = @"leave early";
+        } else if ([lastAttDate isLaterThanDate:date18] || [lastAttDate isEqualToDate:date18]) {
+            // time >= 18 正常下班
+            lastStr = @"OK";
+        } else {
+            // 下午缺勤
+            lastStr = @"X";
+        }
+        attStatus = [NSString stringWithFormat:@"%@\n%@", firstStr, lastStr];
     }
     return [attStatus UTF8String];
 }
