@@ -655,7 +655,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="811">
+                    <button hidden="YES" verticalHuggingPriority="750" imageHugsTitle="YES" id="811">
                         <rect key="frame" x="159" y="152" width="141" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Create Excel file" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="812">
@@ -666,7 +666,7 @@
                             <action selector="createExcel:" target="823" id="826"/>
                         </connections>
                     </button>
-                    <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="827">
+                    <matrix hidden="YES" verticalHuggingPriority="750" allowsEmptySelection="NO" id="827">
                         <rect key="frame" x="211" y="90" width="61" height="38"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -689,17 +689,6 @@
                             </column>
                         </cells>
                     </matrix>
-                    <button verticalHuggingPriority="750" misplaced="YES" id="qy5-yt-LSp">
-                        <rect key="frame" x="315" y="159" width="64" height="19"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="roundRect" title="选择文件" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nal-nL-wXU">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="cellTitle"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="touchSelecteFileBtn:" target="823" id="fYJ-KZ-BYv"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" misplaced="YES" id="Ebz-k2-91L">
                         <rect key="frame" x="315" y="207" width="64" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -709,6 +698,17 @@
                         </buttonCell>
                         <connections>
                             <action selector="clearCache:" target="823" id="jvY-up-dWC"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" misplaced="YES" id="qy5-yt-LSp">
+                        <rect key="frame" x="98" y="207" width="64" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="roundRect" title="选择文件" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nal-nL-wXU">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="cellTitle"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="touchSelecteFileBtn:" target="823" id="fYJ-KZ-BYv"/>
                         </connections>
                     </button>
                 </subviews>
