@@ -134,9 +134,6 @@
             }
         }
         [self checkStaffTitleIndexList];
-//        const char *c = xlSheetReadStr(sheet, 6, 6  , &titleFormat);
-//        NSLog(@"str = %s", c);
-//        NSLog(@"%s", __func__);
     }
     xlBookRelease(sourceBook);
     [self createAttExcel];
