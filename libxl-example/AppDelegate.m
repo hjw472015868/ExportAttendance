@@ -84,15 +84,16 @@
         //是否点击open 按钮
         if (result == NSModalResponseOK) {
             NSString *path = [[panel.URLs firstObject] path];
-            NSLog(@"path-->%@", path);
+            NSLog(@"File path-->%@", path);
             [self readExcelFileWithPath:path];
         }
     }];
 }
 
 - (void)readExcelFileWithPath:(NSString *)path {
+    NSLog(@"----start read file----");
     NSString *extensionStr = [path pathExtension];
-    NSLog(@"extensionStr-->%@", extensionStr);
+//    NSLog(@"extensionStr-->%@", extensionStr);
     BOOL xlsMode = [extensionStr isEqualToString:kXLSExtension];
     BookHandle sourceBook;
     sourceBook = xlsMode ? xlCreateBook() : xlCreateXMLBook();
@@ -103,30 +104,30 @@
             int cellType = xlSheetCellTypeA(_sourceSheet0, i, 1);
             switch (cellType) {
                 case CELLTYPE_BLANK:
-                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_BLANK");
+//                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_BLANK");
 //                    xlSheetReadBlankA(sheet, <#int row#>, <#int col#>, <#FormatHandle *format#>)
                     break;
                 case CELLTYPE_EMPTY:
-                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_EMPTY");
+//                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_EMPTY");
                     break;
                 case CELLTYPE_ERROR:
-                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_ERROR");
+//                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_ERROR");
                     break;
                 case CELLTYPE_NUMBER:
-                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_NUMBER");
+//                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_NUMBER");
                     break;
                 case CELLTYPE_STRING: {
 //                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_STRING");
                     const char *cStr = xlSheetReadStr(_sourceSheet0, i, 1, &_titleFormat);
                     NSString *ocStr = [NSString stringWithUTF8String:cStr];
-                    NSLog(@"%i -- %@",i + 1, ocStr);
+//                    NSLog(@"%i -- %@",i + 1, ocStr);
                     if ([ocStr isEqualToString:@"???"]) {
                         [self.staffTitleIndexList addObject:@(i)];
                     }
                     break;
                 }
                 case CELLTYPE_BOOLEAN:
-                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_BOOLEAN");
+//                    NSLog(@"%i -- %@",i + 1, @"CELLTYPE_BOOLEAN");
                     break;
                     
                 default:
@@ -136,6 +137,7 @@
         [self checkStaffTitleIndexList];
     }
     xlBookRelease(sourceBook);
+    NSLog(@"----read file completion----");
     [self createAttExcel];
 }
 
@@ -177,16 +179,16 @@
     int cellType = xlSheetCellTypeA(_sourceSheet0, rowIndex, kStaffNoColIndex);
     switch (cellType) {
         case CELLTYPE_BLANK:
-            NSLog(@"staffNo-->CELLTYPE_BLANK");
+//            NSLog(@"staffNo-->CELLTYPE_BLANK");
             break;
         case CELLTYPE_EMPTY:
-            NSLog(@"staffNo-->CELLTYPE_EMPTY");
+//            NSLog(@"staffNo-->CELLTYPE_EMPTY");
             break;
         case CELLTYPE_ERROR:
-            NSLog(@"staffNo-->CELLTYPE_ERROR");
+//            NSLog(@"staffNo-->CELLTYPE_ERROR");
             break;
         case CELLTYPE_NUMBER:
-            NSLog(@"staffNo-->CELLTYPE_NUMBER");
+//            NSLog(@"staffNo-->CELLTYPE_NUMBER");
             break;
         case CELLTYPE_STRING: {
             // 读取工号
@@ -197,7 +199,7 @@
             break;
         }
         case CELLTYPE_BOOLEAN:
-            NSLog(@"staffNo-->CELLTYPE_BOOLEAN");
+//            NSLog(@"staffNo-->CELLTYPE_BOOLEAN");
             break;
             
         default:
@@ -245,7 +247,8 @@
 }
 
 - (void)createAttExcel {
-    NSLog(@"self.staffAttList = %@", self.staffAttList);
+    NSLog(@"----start write data to file----");
+//    NSLog(@"self.staffAttList = %@", self.staffAttList);
     SheetHandle targetSheet;
     BookHandle targetBook;
     targetBook = xlCreateXMLBook();
@@ -286,6 +289,7 @@
     xlBookSave(targetBook, [filename UTF8String]);
     xlBookRelease(targetBook);
     [[NSWorkspace sharedWorkspace] openFile:filename];
+    NSLog(@"----write to file completion----");
 }
 
 - (const char *)attStatusWithDay:(YXHDayAtt *)day {
@@ -304,10 +308,10 @@
         NSString *timeStr = [day.attRcod firstObject];
         NSString *attDateStr = [NSString stringWithFormat:@"2018-01-01 %@", timeStr];
         NSDate *attDate = [NSDate dateFromString:attDateStr format:@"yyyy-MM-dd HH:mm"];
-        NSLog(@"attDate = %@", attDate);
-        NSLog(@"date12 = %@", date12);
+//        NSLog(@"attDate = %@", attDate);
+//        NSLog(@"date12 = %@", date12);
         BOOL a = [attDate isEarlierThanDate:date12];
-        NSLog(@"a = %zd", a);
+//        NSLog(@"a = %zd", a);
         if ([attDate isEarlierThanDate:date12] || [attDate isEqualToDate:date12]) {
             if ([attDate isEarlierThanDate:date09] || [attDate isEqualToDate:date09]) {
                 // 上班正常
@@ -364,7 +368,7 @@
 }
 
 - (void)writeDay:(YXHStaffAtt *)staffAtt targetSheet:(SheetHandle)targetSheet format:(FormatHandle)format {
-    NSLog(@"%s", __func__);
+//    NSLog(@"%s", __func__);
     int row = kBaseIndex - 1;
     for (NSInteger i = 0; i < staffAtt.days.count; i++) {
         YXHDayAtt *day = staffAtt.days[i];
